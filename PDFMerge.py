@@ -1,19 +1,29 @@
-import PyPDF2
 import sys
 
-# コマンドライン引数受け取り
-args = sys.argv
-
-file1 = args[1]
-file2 = args[2]
-file3 = args[3]
-
-# PDFマージに使用するクラス
-marger = PyPDF2.PdfMerger()
+import pypdf
 
 
-marger.append(file1)
-marger.append(file2)
+def PDFMerge(MergeFilePathList: list, OutputFilePath: str):
+    """
+    PDFファイルをマージする関数
+    :param MergeFilePathList: マージするPDFファイルのパスのリスト
+    :param OutputFilePath: 出力するPDFファイルのパス
+    """
 
-marger.write(file3)
-marger.close()
+    merger = pypdf.PdfWriter()
+
+    for pdfFile in MergeFilePathList:
+        merger.append(pdfFile)
+
+    merger.write(OutputFilePath)
+    merger.close()
+
+
+if __name__ == "__main__":
+    print("PDFMerge.py")
+
+    # コマンドライン引数受け取り
+    args = sys.argv
+    if len(args) < 4:
+        raise ValueError("引数が足りません")
+    PDFMerge(args[1:-1], args[-1])
